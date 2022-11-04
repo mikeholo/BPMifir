@@ -150,7 +150,7 @@ namespace BPMifir
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerBranchCountry;
                             }
 
-                            if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_CONCAT)
+                            else if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_CONCAT)
                             {
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id = new PersonOrOrganisation1Choice__1();
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id.ItemElementName = BPMifir.ItemChoiceType1.Prsn;
@@ -171,6 +171,52 @@ namespace BPMifir
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerBranchCountry;
 
                             }
+
+                            else if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_NIDN)
+                            {
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id = new PersonOrOrganisation1Choice__1();
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id.ItemElementName = BPMifir.ItemChoiceType1.Prsn;
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id.Item = new PersonIdentification10__1()
+                                {
+                                    Othr = new GenericPersonIdentification1__1()
+                                    {
+                                        SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "NIDN", ItemElementName = ItemChoiceType.Cd },
+                                        Id = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerId.Item.ToString()
+                                    },
+                                    BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerBirthdate),
+                                    Nm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerSurname.ToUpper(),
+                                    FrstNm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerFirstname.ToUpper()
+
+
+                                };
+
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerBranchCountry;
+
+                            }
+
+                            else if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_CCPT)
+                            {
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id = new PersonOrOrganisation1Choice__1();
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id.ItemElementName = BPMifir.ItemChoiceType1.Prsn;
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].Id.Item = new PersonIdentification10__1()
+                                {
+                                    Othr = new GenericPersonIdentification1__1()
+                                    {
+                                        SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "CCPT", ItemElementName = ItemChoiceType.Cd },
+                                        Id = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerId.Item.ToString()
+                                    },
+                                    BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerBirthdate),
+                                    Nm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerSurname.ToUpper(),
+                                    FrstNm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerFirstname.ToUpper()
+
+
+                                };
+
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDetails[ii].buyerBranchCountry;
+
+                            }
+
+
                         }
 
                         //Add Decision Makers
@@ -192,7 +238,7 @@ namespace BPMifir
                                         = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionMakerId.Item.ToString();
                                 }
 
-                                if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_CONCAT)
+                                else if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_CONCAT)
                                 {
                                     ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.DcsnMakr[ii] = new PersonOrOrganisation2Choice__1();
                                     ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.DcsnMakr[ii].Item = new PersonIdentification10__1()
@@ -207,6 +253,39 @@ namespace BPMifir
                                         FrstNm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionFirstname.ToUpper()
                                     };
                                 }
+
+                                else if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_NIDN)
+                                {
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.DcsnMakr[ii] = new PersonOrOrganisation2Choice__1();
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.DcsnMakr[ii].Item = new PersonIdentification10__1()
+                                    {
+                                        Othr = new GenericPersonIdentification1__1()
+                                        {
+                                            SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "NIDN", ItemElementName = ItemChoiceType.Cd },
+                                            Id = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionMakerId.Item.ToString()
+                                        },
+                                        BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionBirthdate),
+                                        Nm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionSurname.ToUpper(),
+                                        FrstNm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionFirstname.ToUpper()
+                                    };
+                                }
+
+                                else if (dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_CCPT)
+                                {
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.DcsnMakr[ii] = new PersonOrOrganisation2Choice__1();
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Buyr.DcsnMakr[ii].Item = new PersonIdentification10__1()
+                                    {
+                                        Othr = new GenericPersonIdentification1__1()
+                                        {
+                                            SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "CCPT", ItemElementName = ItemChoiceType.Cd },
+                                            Id = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionMakerId.Item.ToString()
+                                        },
+                                        BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionBirthdate),
+                                        Nm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionSurname.ToUpper(),
+                                        FrstNm = dbtr.mifir.counterpartyDetails.buyer.mifirBuyerDecisionMakerDetails[ii].buyerDecisionFirstname.ToUpper()
+                                    };
+                                }
+
                             };
                     
 
@@ -217,6 +296,8 @@ namespace BPMifir
 
                         ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr
                             = new PartyIdentification76__1[dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails.Count()];
+
+                        var xxx = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails.Count();
 
                         for (int ii = 0; ii < dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails.Count(); ii++)
                         {
@@ -231,7 +312,7 @@ namespace BPMifir
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerBranchCountry;
                             }
 
-                            if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_CONCAT)
+                            else if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_CONCAT)
                             {
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id = new PersonOrOrganisation1Choice__1();
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id.ItemElementName = BPMifir.ItemChoiceType1.Prsn;
@@ -252,6 +333,52 @@ namespace BPMifir
                                 ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerBranchCountry;
 
                             }
+
+                            else if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_NIDN)
+                            {
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id = new PersonOrOrganisation1Choice__1();
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id.ItemElementName = BPMifir.ItemChoiceType1.Prsn;
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id.Item = new PersonIdentification10__1()
+                                {
+                                    Othr = new GenericPersonIdentification1__1()
+                                    {
+                                        SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "NIDN", ItemElementName = ItemChoiceType.Cd },
+                                        Id = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerId.Item.ToString()
+                                    },
+                                    BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerBirthdate),
+                                    Nm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerSurname.ToUpper(),
+                                    FrstNm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerFirstname.ToUpper()
+
+
+                                };
+
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerBranchCountry;
+
+                            }
+
+                            else if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerId.ItemElementName == DB.ItemChoiceType.NATIONAL_ID_CCPT)
+                            {
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id = new PersonOrOrganisation1Choice__1();
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id.ItemElementName = BPMifir.ItemChoiceType1.Prsn;
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].Id.Item = new PersonIdentification10__1()
+                                {
+                                    Othr = new GenericPersonIdentification1__1()
+                                    {
+                                        SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "CCPT", ItemElementName = ItemChoiceType.Cd },
+                                        Id = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerId.Item.ToString()
+                                    },
+                                    BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerBirthdate),
+                                    Nm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerSurname.ToUpper(),
+                                    FrstNm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerFirstname.ToUpper()
+
+
+                                };
+
+                                ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.AcctOwnr[ii].CtryOfBrnch = dbtr.mifir.counterpartyDetails.seller.mifirSellerDetails[ii].sellerBranchCountry;
+
+                            }
+
+
                         }
 
                         //Add Decision Makers
@@ -272,7 +399,7 @@ namespace BPMifir
                                         = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.Item.ToString();
                                 }
 
-                                if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_CONCAT)
+                                else if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_CONCAT)
                                 {
                                     ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.DcsnMakr[ii] = new PersonOrOrganisation2Choice__1();
                                     ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.DcsnMakr[ii].Item = new PersonIdentification10__1()
@@ -280,6 +407,38 @@ namespace BPMifir
                                         Othr = new GenericPersonIdentification1__1()
                                         {
                                             SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "CONCAT", ItemElementName = ItemChoiceType.Prtry },
+                                            Id = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.Item.ToString()
+                                        },
+                                        BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionBirthdate),
+                                        Nm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionSurname.ToUpper(),
+                                        FrstNm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionFirstname.ToUpper()
+                                    };
+                                }
+
+                                if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_NIDN)
+                                {
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.DcsnMakr[ii] = new PersonOrOrganisation2Choice__1();
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.DcsnMakr[ii].Item = new PersonIdentification10__1()
+                                    {
+                                        Othr = new GenericPersonIdentification1__1()
+                                        {
+                                            SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "NIDN", ItemElementName = ItemChoiceType.Cd },
+                                            Id = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.Item.ToString()
+                                        },
+                                        BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionBirthdate),
+                                        Nm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionSurname.ToUpper(),
+                                        FrstNm = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionFirstname.ToUpper()
+                                    };
+                                }
+
+                                if (dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.ItemElementName == DB.ItemChoiceType1.NATIONAL_ID_CCPT)
+                                {
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.DcsnMakr[ii] = new PersonOrOrganisation2Choice__1();
+                                    ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Sellr.DcsnMakr[ii].Item = new PersonIdentification10__1()
+                                    {
+                                        Othr = new GenericPersonIdentification1__1()
+                                        {
+                                            SchmeNm = new PersonIdentificationSchemeName1Choice__1() { Item = "CCPT", ItemElementName = ItemChoiceType.Cd },
                                             Id = dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionMakerId.Item.ToString()
                                         },
                                         BirthDt = DateTime.Parse(dbtr.mifir.counterpartyDetails.seller.mifirSellerDecisionMakerDetails[ii].sellerDecisionBirthdate),
@@ -305,8 +464,9 @@ namespace BPMifir
                         ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Tx.TradVn
                                 = dbtr.mifir.transactionDetails.venue;
 
-                        ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Tx.CtryOfBrnch
-                             = dbtr.mifir.otherDetails.supervisingBranchCountry;
+                        if(dbtr.mifir.transactionDetails.venue != "XOFF" && dbtr.mifir.transactionDetails.venue != "XXXX")
+                            ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).Tx.CtryOfBrnch
+                                = dbtr.mifir.otherDetails.supervisingBranchCountry;
 
                         if(dbtr.mifir.transactionDetails.upfrontPayment!=null)
                         {
@@ -414,7 +574,8 @@ namespace BPMifir
 
                             ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).ExctgPrsn.Item = new PersonIdentification12__1()
                             {
-                                CtryOfBrnch = DestinationCountryCode.Text,
+                                //CtryOfBrnch = DestinationCountryCode.Text,
+                                CtryOfBrnch = dbtr.mifir.otherDetails.supervisingBranchCountry,
                                 Othr = new GenericPersonIdentification1__1()
                                 {
                                     Id = dbtr.mifir.otherDetails.executionId.Item,
@@ -432,7 +593,8 @@ namespace BPMifir
 
                             ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).ExctgPrsn.Item = new PersonIdentification12__1()
                             {
-                                CtryOfBrnch =  DestinationCountryCode.Text,
+                                //CtryOfBrnch =  DestinationCountryCode.Text,
+                                CtryOfBrnch = dbtr.mifir.otherDetails.supervisingBranchCountry,
                                 Othr = new GenericPersonIdentification1__1()
                                 {
                                     Id = dbtr.mifir.otherDetails.executionId.Item,
@@ -463,7 +625,8 @@ namespace BPMifir
                             ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).InvstmtDcsnPrsn = new InvestmentParty1Choice__1();
                             ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).InvstmtDcsnPrsn.Item = new PersonIdentification12__1()
                             {
-                                CtryOfBrnch = DestinationCountryCode.Text,
+                                //CtryOfBrnch = DestinationCountryCode.Text,
+                                CtryOfBrnch = dbtr.mifir.otherDetails.investmentDecisionBranchCountry,
                                 Othr = new GenericPersonIdentification1__1()
                                 {
                                     Id = dbtr.mifir.otherDetails.investmentDecisionId.Item,
@@ -487,6 +650,23 @@ namespace BPMifir
                                     SchmeNm = new PersonIdentificationSchemeName1Choice__1()
                                     {
                                         Item = "CCPT",
+                                        ItemElementName = ItemChoiceType.Cd,
+                                    }
+                                }
+                            };
+                        }
+                        else if (dbtr.mifir.otherDetails.investmentDecisionId?.ItemElementName == DB.ItemChoiceType5.NATIONAL_ID_NIDN)
+                        {
+                            ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).InvstmtDcsnPrsn = new InvestmentParty1Choice__1();
+                            ((SecuritiesTransactionReport4__1)(cyDoc.Pyld.Document.FinInstrmRptgTxRpt[i].Item)).InvstmtDcsnPrsn.Item = new PersonIdentification12__1()
+                            {
+                                CtryOfBrnch = !string.IsNullOrEmpty(dbtr.mifir.otherDetails.investmentDecisionBranchCountry) ? dbtr.mifir.otherDetails.investmentDecisionBranchCountry : DestinationCountryCode.Text,
+                                Othr = new GenericPersonIdentification1__1()
+                                {
+                                    Id = dbtr.mifir.otherDetails.investmentDecisionId.Item,
+                                    SchmeNm = new PersonIdentificationSchemeName1Choice__1()
+                                    {
+                                        Item = "NIDN",
                                         ItemElementName = ItemChoiceType.Cd,
                                     }
                                 }
@@ -577,8 +757,8 @@ namespace BPMifir
         private void Terms_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
-                "Use at yourown risk.\nThis is a test application and should not be used in production.\n" +
-                "The developer makes no guarantees, express or implied and does not assumes any responsibility" +
+                "Use at yourown risk.\nThis is a free test application and should not be used in production.\n" +
+                "The developer makes no guarantees, express or implied and does not assume any responsibility" +
                 "for the accuracy of the results or any damages that may result from the use of this application.", "Terms of Use");
             return;
         }

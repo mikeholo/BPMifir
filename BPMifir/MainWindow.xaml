@@ -22,6 +22,6 @@
         <TextBox x:Name="SequenceNumber" HorizontalAlignment="Left" Margin="341,164,0,0" Text="000001" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Background="{x:Null}" TextAlignment="Center"/>
         <TextBox x:Name="Version" HorizontalAlignment="Left" Margin="372,192,0,0" Text="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="17" Background="{x:Null}" TextAlignment="Center"/>
         <TextBox x:Name="PreviousSequenceNumber" HorizontalAlignment="Left" Margin="341,217,0,0" Text="000000" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Background="{x:Null}" TextAlignment="Center"/>
-        <Button x:Name="Terms" Content="Disclaimer and Terms of Use" HorizontalAlignment="Left" Margin="212,334,0,0" VerticalAlignment="Top" Width="150" Background="{x:Null}" BorderBrush="{x:Null}" Click="Terms_Click" FontStyle="Italic" FontSize="11"/>
+        <Button x:Name="Terms" Content="Disclaimer" HorizontalAlignment="Left" Margin="212,261,0,0" VerticalAlignment="Top" Width="150" Background="{x:Null}" BorderBrush="{x:Null}" Click="Terms_Click" FontStyle="Italic" FontSize="11"/>
     </Grid>
 </Window>
