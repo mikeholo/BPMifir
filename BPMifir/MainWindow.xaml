@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BPMifir"
         mc:Ignorable="d"
-        Title="MainWindow" Height="386" Width="532">
+        Title="MainWindow" Height="386" Width="532" Icon="app.ico">
     <Grid Margin="0,0,0,7">
         <Border BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Left" Height="178" Margin="131,81,0,0" VerticalAlignment="Top" Width="308"/>
         <Label Content="" Margin="181,32,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>

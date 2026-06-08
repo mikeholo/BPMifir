@@ -19,7 +19,7 @@ namespace DB
 
         private fileInformation fileInformationField;
 
-        private record recordField;
+        private @record recordField;
 
         /// <remarks/>
         public fileInformation fileInformation
@@ -35,7 +35,7 @@ namespace DB
         }
 
         /// <remarks/>
-        public record record
+        public @record record
         {
             get
             {
@@ -3558,7 +3558,7 @@ namespace DB
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://deutsche-boerse.com/DBRegHub")]
-    public partial class record
+    public partial class @record
     {
 
         private object[] itemsField;
