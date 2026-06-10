@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using System.Xml.Serialization;
 using System.Windows.Resources;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 
 
@@ -27,6 +28,7 @@ namespace BPMifir
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const int MaxSequenceNumber = 999999;
 
         // Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
@@ -34,6 +36,12 @@ namespace BPMifir
         {      
             //LEI.Text = localSettings.Values["DestinationCountryCode"]!=null ? localSettings.Values["DestinationCountryCode"].ToString() : "XXXXXXXXXXXXXXXXXXXX";
             InitializeComponent();
+            LastConfirmedSequenceNumber.TextChanged += LastConfirmedSequenceNumber_TextChanged;
+            LastConfirmedSequenceNumber.LostFocus += LastConfirmedSequenceNumber_LostFocus;
+            ReportingEntityCode.LostFocus += CodeField_LostFocus;
+            DestinationCountryCode.LostFocus += CodeField_LostFocus;
+
+            TryUpdateGeneratedSequenceFields(showErrors: false);
 
         }
 
@@ -46,6 +54,16 @@ namespace BPMifir
             localSettings.Values["PreviousSequenceNumber"] = PreviousSequenceNumber.Text;
             localSettings.Values["Version"] = Version.Text;
             */
+
+            if (!TryPrepareReportNaming(
+                out string reportingEntityCode,
+                out string destinationCountryCode,
+                out string sequenceNumber,
+                out string version,
+                out string previousSequenceNumber))
+            {
+                return;
+            }
 
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.DefaultExt = ".xml"; // Required file extension 
@@ -76,11 +94,11 @@ namespace BPMifir
                 try 
                 {
                     List<string> missingReportFields = GetMissingFields(
-                        ("Reporting entity code", ReportingEntityCode.Text),
-                        ("Destination country code", DestinationCountryCode.Text),
-                        ("Report sequence number", SequenceNumber.Text),
-                        ("Version", Version.Text),
-                        ("Previous sequence number", PreviousSequenceNumber.Text),
+                        ("Reporting entity code", reportingEntityCode),
+                        ("Destination country code", destinationCountryCode),
+                        ("Report sequence number", sequenceNumber),
+                        ("Version", version),
+                        ("Previous sequence number", previousSequenceNumber),
                         ("Transaction record container", dbDoc.record == null ? null : "present"),
                         ("Transaction records", dbDoc.record?.Items?.Length > 0 ? "present" : null))
                         .ToList();
@@ -105,18 +123,18 @@ namespace BPMifir
                     cyDoc.Hdr.AppHdr.Fr.OrgId.Id = new AppHdrFROrgIdID();
                     cyDoc.Hdr.AppHdr.Fr.OrgId.Id.OrgId = new AppHdrFROrgIdIDOrgId();
                     cyDoc.Hdr.AppHdr.Fr.OrgId.Id.OrgId.Othr = new AppHdrFROrgIdIDOrgIdOthr();
-                    cyDoc.Hdr.AppHdr.Fr.OrgId.Id.OrgId.Othr.Id = ReportingEntityCode.Text;
+                    cyDoc.Hdr.AppHdr.Fr.OrgId.Id.OrgId.Othr.Id = reportingEntityCode;
 
                     cyDoc.Hdr.AppHdr.To = new AppHdrTO();
                     cyDoc.Hdr.AppHdr.To.OrgId = new AppHdrTOOrgId();
                     cyDoc.Hdr.AppHdr.To.OrgId.Id = new AppHdrTOOrgIdID();
                     cyDoc.Hdr.AppHdr.To.OrgId.Id.OrgId = new AppHdrTOOrgIdIDOrgId();
                     cyDoc.Hdr.AppHdr.To.OrgId.Id.OrgId.Othr = new AppHdrTOOrgIdIDOrgIdOthr();
-                    cyDoc.Hdr.AppHdr.To.OrgId.Id.OrgId.Othr.Id = DestinationCountryCode.Text;
+                    cyDoc.Hdr.AppHdr.To.OrgId.Id.OrgId.Othr.Id = destinationCountryCode;
 
-                    string BizMsgIdr = ReportingEntityCode.Text + "_DATTRA_"
-                        + DestinationCountryCode.Text + "_"+SequenceNumber.Text + "-"
-                        + Version.Text + "-" + PreviousSequenceNumber.Text
+                    string BizMsgIdr = reportingEntityCode + "_DATTRA_"
+                        + destinationCountryCode + "_" + sequenceNumber + "-"
+                        + version + "-" + previousSequenceNumber
                         + "_" + DateTime.Now.ToString("yy");
 
                     cyDoc.Hdr.AppHdr.BizMsgIdr = BizMsgIdr;
@@ -1400,6 +1418,158 @@ namespace BPMifir
             {
                 missing.Add($"Valid {fieldName.ToLower()}");
             }
+        }
+
+        private void LastConfirmedSequenceNumber_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TryUpdateGeneratedSequenceFields(showErrors: false);
+        }
+
+        private void LastConfirmedSequenceNumber_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (TryParseSequenceNumber(LastConfirmedSequenceNumber.Text, "Last confirmed sequence number", out int lastConfirmedSequenceNumber, out _))
+            {
+                LastConfirmedSequenceNumber.Text = FormatSequenceNumber(lastConfirmedSequenceNumber);
+                TryUpdateGeneratedSequenceFields(showErrors: false);
+            }
+        }
+
+        private void CodeField_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                textBox.Text = NormalizeCode(textBox.Text);
+            }
+        }
+
+        private bool TryPrepareReportNaming(
+            out string reportingEntityCode,
+            out string destinationCountryCode,
+            out string sequenceNumber,
+            out string version,
+            out string previousSequenceNumber)
+        {
+            reportingEntityCode = NormalizeCode(ReportingEntityCode.Text);
+            destinationCountryCode = NormalizeCode(DestinationCountryCode.Text);
+            sequenceNumber = null;
+            version = null;
+            previousSequenceNumber = null;
+
+            ReportingEntityCode.Text = reportingEntityCode;
+            DestinationCountryCode.Text = destinationCountryCode;
+
+            if (string.IsNullOrWhiteSpace(reportingEntityCode))
+            {
+                ShowNamingValidationError("Reporting entity code is required.");
+                return false;
+            }
+
+            if (!Regex.IsMatch(reportingEntityCode, "^[A-Z0-9]+$"))
+            {
+                ShowNamingValidationError("Reporting entity code must contain only capital letters and digits.");
+                return false;
+            }
+
+            if (!Regex.IsMatch(destinationCountryCode, "^[A-Z]{2}$"))
+            {
+                ShowNamingValidationError("Destination country code must be two capital letters.");
+                return false;
+            }
+
+            if (!TryUpdateGeneratedSequenceFields(showErrors: true))
+            {
+                return false;
+            }
+
+            if (!TryParseVersion(Version.Text, out int parsedVersion, out string versionError))
+            {
+                ShowNamingValidationError(versionError);
+                return false;
+            }
+
+            version = parsedVersion.ToString(CultureInfo.InvariantCulture);
+            Version.Text = version;
+            sequenceNumber = SequenceNumber.Text;
+            previousSequenceNumber = PreviousSequenceNumber.Text;
+
+            return true;
+        }
+
+        private bool TryUpdateGeneratedSequenceFields(bool showErrors)
+        {
+            if (LastConfirmedSequenceNumber == null || SequenceNumber == null || PreviousSequenceNumber == null)
+            {
+                return false;
+            }
+
+            if (!TryParseSequenceNumber(LastConfirmedSequenceNumber.Text, "Last confirmed sequence number", out int lastConfirmedSequenceNumber, out string error))
+            {
+                if (showErrors)
+                {
+                    ShowNamingValidationError(error);
+                }
+
+                return false;
+            }
+
+            PreviousSequenceNumber.Text = FormatSequenceNumber(lastConfirmedSequenceNumber);
+            SequenceNumber.Text = FormatSequenceNumber(GetNextSequenceNumber(lastConfirmedSequenceNumber));
+
+            return true;
+        }
+
+        private static bool TryParseSequenceNumber(string value, string fieldName, out int sequenceNumber, out string error)
+        {
+            sequenceNumber = 0;
+            string trimmedValue = value?.Trim() ?? string.Empty;
+
+            if (!Regex.IsMatch(trimmedValue, "^\\d{1,6}$"))
+            {
+                error = $"{fieldName} must be a number from 000000 to 999999.";
+                return false;
+            }
+
+            sequenceNumber = int.Parse(trimmedValue, CultureInfo.InvariantCulture);
+            error = null;
+            return true;
+        }
+
+        private static bool TryParseVersion(string value, out int version, out string error)
+        {
+            version = 0;
+            string trimmedValue = value?.Trim() ?? string.Empty;
+
+            if (!Regex.IsMatch(trimmedValue, "^\\d$"))
+            {
+                error = "Version must be a single digit from 0 to 9.";
+                return false;
+            }
+
+            version = int.Parse(trimmedValue, CultureInfo.InvariantCulture);
+            error = null;
+            return true;
+        }
+
+        private static int GetNextSequenceNumber(int lastConfirmedSequenceNumber)
+        {
+            return lastConfirmedSequenceNumber >= MaxSequenceNumber
+                ? 1
+                : lastConfirmedSequenceNumber + 1;
+        }
+
+        private static string FormatSequenceNumber(int sequenceNumber)
+        {
+            return sequenceNumber.ToString("D6", CultureInfo.InvariantCulture);
+        }
+
+        private static string NormalizeCode(string value)
+        {
+            return (value ?? string.Empty).Trim().ToUpperInvariant();
+        }
+
+        private static void ShowNamingValidationError(string message)
+        {
+            MessageBox.Show(message, "Invalid Report Name");
         }
 
         private void Terms_Click(object sender, RoutedEventArgs e)
