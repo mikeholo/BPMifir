@@ -4,6 +4,8 @@ This application translates an upstream MiFIR transaction-reporting XML file int
 
 These notes are implementation context for maintainers. They are not legal, compliance, or regulatory advice.
 
+For the agreed product redesign, archive model, recovery approach, and DORA/DPIA-oriented operating controls, see `docs/TargetArchitecture.md`.
+
 ## Source Context
 
 MiFIR Article 26 requires investment firms that execute reportable transactions to report complete and accurate transaction details to the competent authority as quickly as possible and no later than the close of the following working day. The report can be submitted by the investment firm, an Approved Reporting Mechanism (ARM), or the trading venue through whose system the transaction was completed. Investment firms remain responsible for completeness, accuracy, and timely submission except for failures attributable to an ARM or trading venue, and errors or omissions must be corrected.
